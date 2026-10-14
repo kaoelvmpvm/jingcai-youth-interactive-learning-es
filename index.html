@@ -7,8 +7,8 @@
   <meta name="description" content="經彩青春 SET 國小互動教材｜跟著樂樂、小琪、大明與護理師，完成10道月經友善小任務。">
   <title>經彩青春 SET｜樂樂怎麼了？</title>
   <link rel="stylesheet" href="./assets/style.css">
-  <script src="./data/scenes.js" defer></script>
-  <script src="./assets/app.js" defer></script>
+  <script src="./data/scenes.js?v=20261014" defer></script>
+  <script src="./assets/app.js?v=20261014" defer></script>
 </head>
 <body>
   <div class="site-shell">
@@ -54,14 +54,14 @@
             <div class="guide-step"><b>02</b><div><strong>選一選</strong><p>從三個答案中選出最合適的做法。</p></div></div>
             <div class="guide-step"><b>03</b><div><strong>學一學</strong><p>獲得知識徽章，繼續下一關！</p></div></div>
           </div>
-          <button id="startBtn" class="primary-btn start-btn" type="button">開始經彩旅程 <span aria-hidden="true">↗</span></button>
+          <button id="startBtn" class="primary-btn start-btn" type="button">開始挑戰 <span aria-hidden="true">↗</span></button>
           <p class="guide-foot">所有問題都可以再試一次，慢慢想也沒關係。</p>
         </div>
       </section>
       <section id="play" class="view play" hidden aria-labelledby="sceneTitle">
         <div class="status-heading">
           <div class="status-title"><p class="kicker"><span class="kicker-dot"></span>經彩任務進行中</p><h1 id="journeyHeading">用一點知識，帶來很多友善。</h1></div>
-          <div class="status-numbers"><span id="pageCount" class="page-count">02 <small>/ 23</small></span><span class="star-count">✦ <b id="starCount">0</b><small> / 10</small></span></div>
+          <div class="status-numbers"><span id="pageCount" class="page-count">02 <small>/ 22</small></span><span class="star-count">✦ <b id="starCount">0</b><small> / 10</small></span></div>
         </div>
         <div class="progress-line" role="progressbar" aria-label="教材總進度" aria-valuemin="0" aria-valuemax="21" aria-valuenow="0" id="progressTrack"><span id="progressBar"></span></div>
         <div class="stage-grid">
@@ -95,7 +95,7 @@
         <div class="scene-controls">
           <button type="button" class="secondary-btn" id="backBtn">← 上一頁</button>
           <div class="scene-control-note" id="controlHint">讀完情境，再繼續探索。</div>
-          <button type="button" class="primary-btn next-btn" id="nextBtn">下一頁 <span aria-hidden="true">→</span></button>
+          <button type="button" class="primary-btn next-btn" id="nextBtn">下一幕 <span aria-hidden="true">→</span></button>
         </div>
       </section>
       <section id="finish" class="view finish" hidden aria-labelledby="finishTitle">
@@ -104,7 +104,7 @@
         <p class="eyebrow finish-eyebrow">10 個任務 · 全部達成</p>
         <h1 id="finishTitle" tabindex="-1">恭喜你完成終極挑戰！</h1>
         <p id="finishText" class="finish-text"></p>
-        <div class="unlock-card"><p>恭喜獲得稱號與獎勵</p><strong>平權小超人</strong><div class="unlock-divider"></div><span>青春密碼</span><b id="unlockCode">5200</b></div>
+        <div class="unlock-card"><p>恭喜獲得稱號與獎勵</p><strong>平權小超人</strong><div class="unlock-divider"></div><span>經彩青春 Set 密碼</span><b id="unlockCode">0451</b><p id="unlockMeaning" class="unlock-meaning">你是唯一</p></div>
         <div class="finish-actions"><button id="copyCodeBtn" type="button" class="secondary-btn">複製青春密碼</button><button id="againBtn" type="button" class="primary-btn">再玩一次 ↻</button></div>
         <p id="copyMessage" class="copy-message" role="status"></p>
       </section>
