@@ -1,4 +1,4 @@
-/* 經彩青春 SET｜國小互動教材：依據23頁腳本循序閱讀、10題作答後解鎖知識回饋 */
+/* 經彩青春 SET｜國小互動教材：依據22頁調整版腳本循序閱讀、10題作答後解鎖知識回饋 */
 (() => {
   "use strict";
   const data = window.JINGCAI_DATA;
@@ -12,7 +12,7 @@
     tag:$("contentTag"),task:$("taskCount"),lines:$("storyLines"),
     quiz:$("quizPanel"),question:$("questionText"),options:$("options"),feedback:$("quizFeedback"),
     achievement:$("achievement"),achievementTitle:$("achievementTitle"),hint:$("controlHint"),
-    finishTitle:$("finishTitle"),finishText:$("finishText"),unlock:$("unlockCode"),
+    finishTitle:$("finishTitle"),finishText:$("finishText"),unlock:$("unlockCode"),unlockMeaning:$("unlockMeaning"),
     copy:$("copyCodeBtn"),copyMessage:$("copyMessage")
   };
   if (!data || !Array.isArray(data.pages) || data.pages.length !== 21) {
@@ -98,7 +98,7 @@
     if(pick===page.correct){
       completeQuestion(page);
       lastWrong=-1;
-      feedback("答對了！獲得一枚經彩星星 ✦。按「下一頁」就能解鎖這題的知識徽章。",true);
+      feedback("答對了！獲得一枚經彩星星 ✦。按「下一幕」就能解鎖這題的知識徽章。",true);
     }else{
       lastWrong=pick;
       feedback("再想一想！回到故事，找出最能照顧自己、尊重他人的做法，再選一次。",false);
@@ -127,7 +127,7 @@
     if(index>=pages.length){finish();return}
     const page=pages[index];
     if(!page){reset();return}
-    UI.pageCount.innerHTML=String(page.page).padStart(2,"0")+" <small>/ 23</small>";
+    UI.pageCount.innerHTML=String(page.page).padStart(2,"0")+" <small>/ 22</small>";
     UI.starCount.textContent=String(finishedQuestions.size);
     UI.progress.setAttribute("aria-valuenow",String(index+1));
     UI.bar.style.width=(100*(index+1)/pages.length)+"%";
@@ -148,7 +148,7 @@
     if(page.kind==="quiz"){
       UI.question.textContent=page.question;
       UI.feedback.hidden=!finishedQuestions.has(page.qid);
-      if(finishedQuestions.has(page.qid))feedback("這一題已完成 ✓。你已獲得經彩星星，繼續閱讀下一頁的知識回饋吧！",true);
+      if(finishedQuestions.has(page.qid))feedback("這一題已完成 ✓。你已獲得經彩星星，繼續閱讀下一幕的知識回饋吧！",true);
       renderOptions(page);
       UI.next.disabled=!finishedQuestions.has(page.qid);
       UI.hint.textContent=UI.next.disabled?"先完成這一題，才能繼續喔。":"這一題已完成，可以繼續前進。";
@@ -158,11 +158,11 @@
         UI.achievementTitle.textContent=page.title;
         UI.hint.textContent="這就是剛才題目的學習重點，讀完繼續前進！";
       }else{
-        UI.hint.textContent="讀完故事，按「下一頁」挑戰第一題。";
+        UI.hint.textContent="讀完故事，按「下一幕」挑戰第一題。";
       }
     }
     UI.back.textContent=index===0?"← 回到封面":"← 上一頁";
-    UI.next.innerHTML=index===pages.length-1?'領取青春密碼 <span aria-hidden="true">→</span>':'下一頁 <span aria-hidden="true">→</span>';
+    UI.next.innerHTML=index===pages.length-1?'領取經彩青春 Set 密碼 <span aria-hidden="true">→</span>':'下一幕 <span aria-hidden="true">→</span>';
     show("play");
     UI.heading.focus({preventScroll:true});
   }
@@ -172,6 +172,7 @@
     UI.finishTitle.textContent=data.ending.title;
     UI.finishText.textContent=data.ending.text;
     UI.unlock.textContent=data.ending.code;
+    UI.unlockMeaning.textContent=data.ending.meaning;
     UI.copyMessage.textContent="";
     UI.progress.setAttribute("aria-valuenow",String(pages.length));
     UI.bar.style.width="100%";
@@ -199,14 +200,14 @@
     try{
       if(!navigator.clipboard || !navigator.clipboard.writeText)throw new Error("clipboard unavailable");
       await navigator.clipboard.writeText(code);
-      UI.copyMessage.textContent="青春密碼已複製： "+code;
+      UI.copyMessage.textContent="經彩青春 Set 密碼已複製： "+code;
     }catch(e){
       const area=document.createElement("textarea");area.value=code;
       area.style.cssText="position:fixed;left:-9999px;opacity:0";
       document.body.append(area);area.select();
       const ok=document.execCommand && document.execCommand("copy");
       area.remove();
-      UI.copyMessage.textContent=ok?"青春密碼已複製： "+code:"青春密碼： "+code+"（請長按或手動複製）";
+      UI.copyMessage.textContent=ok?"經彩青春 Set 密碼已複製： "+code:"經彩青春 Set 密碼： "+code+"（請長按或手動複製）";
     }
   }
   makeRoster();
