@@ -56,9 +56,9 @@ test("調整版的清潔題、班會課與最後的月經友善題完全對應�
   const p=n=>d.pages.find(x=>x.page===n);
   assert.equal(p(17).options[1],"徹底洗香香，用清潔劑沖洗私密處");
   assert.equal(p(17).correct,0);
-  assert.match(p(18).lines[0].text,/不需用力刷和以清潔劑沖洗/);
-  assert.match(p(18).lines[0].text,/私密處\\(陰道\\)/);
-  assert.match(p(21).lines[0].text,/功力等級大增！回到教室/);
+  assert.ok(p(18).lines[0].text.includes("不需用力刷和以清潔劑沖洗"));
+  assert.ok(p(18).lines[0].text.includes("私密處(陰道)"));
+  assert.ok(p(21).lines[0].text.includes("功力等級大增！回到教室"));
   assert.deepEqual(Array.from(p(21).options),[
     "覺得經血很可怕，像個怪物遠躲開",
     "提到月經很丟臉，多開玩笑不尷尬",
@@ -72,11 +72,11 @@ test("調整版的清潔題、班會課與最後的月經友善題完全對應�
 test("22頁介面與通關密碼、解釋一致",()=>{
   const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
   const app=fs.readFileSync(path.join(root,"assets/app.js"),"utf8");
-  assert.match(html,/id="unlockCode">0451<\\/b>/);
-  assert.match(html,/id="unlockMeaning"/);
-  assert.match(html,/下一幕/);
-  assert.match(app,/\\/ 22<\\/small>/);
-  assert.match(app,/data\\.ending\\.meaning/);
-  assert.doesNotMatch(html,/5200/);
-  assert.doesNotMatch(app,/5200/);
+  assert.ok(html.includes('id="unlockCode">0451</b>'));
+  assert.ok(html.includes('id="unlockMeaning"'));
+  assert.ok(html.includes("下一幕"));
+  assert.ok(app.includes("/ 22</small>"));
+  assert.ok(app.includes("data.ending.meaning"));
+  assert.ok(!html.includes("5200"));
+  assert.ok(!app.includes("5200"));
 });
