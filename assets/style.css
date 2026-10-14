@@ -68,3 +68,68 @@ button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:
   .cast{padding-top:7px}
   .actor-mood{width:23px;height:23px;font-size:13px;bottom:37px;right:0}
 }
+
+
+/* 2026-10-14 修訂：素材留白、劇情舞臺單一對話來源、循序編號、徽章置頂。 */
+.play>.achievement{margin:0 0 20px;border:2px solid #edcf7c;border-radius:22px;background:linear-gradient(125deg,#fffaf1,#fff0c4);padding:17px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 9px 20px rgba(153,109,39,.12)}
+.play>.achievement[hidden]{display:none!important}
+.play>.achievement .medal{width:58px;height:58px;font-size:33px;border-radius:17px;background:#ffe5a5}
+.play>.achievement p{margin:0;color:#966027;font-size:14px;font-weight:950;letter-spacing:.045em}
+.play>.achievement h2{font-size:clamp(20px,2.2vw,27px);margin:1px 0 2px;color:#85551e;line-height:1.45}
+.play>.achievement span:not(.medal){font-size:13px;color:#825d2e;line-height:1.65}
+.stage-dialogues{position:relative;z-index:5;margin:22px auto 8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:12px;max-width:1140px;align-items:stretch}
+.stage-bubble{min-width:0;background:#fffefaed;border:1.5px solid #e2b6c9;border-radius:19px;padding:14px 17px 15px;box-shadow:0 8px 22px rgba(111,63,87,.12);color:#4c3d4b}
+.stage-bubble-long{grid-column:1/-1;max-width:100%}
+.stage-bubble-narrator{background:#fffaf0ed;border-color:#e8d5af}
+.stage-bubble-head{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bubble-order{width:29px;height:29px;border-radius:999px;background:#a44e71;color:#fff;display:grid;place-items:center;font-size:19px;line-height:1;flex:0 0 auto}
+.stage-bubble-narrator .bubble-order{background:#9f7a3d}
+.bubble-speaker{font-size:14px;font-weight:950;color:#884d69}
+.stage-bubble-narrator .bubble-speaker{color:#8c6f42}
+.stage-bubble p{margin:0;font-size:clamp(15px,1.42vw,18px);font-weight:730;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.cast,.cast.actor-count-1{min-height:0;padding:14px 12px 1px;align-items:end;gap:clamp(6px,2vw,22px)}
+.cast .actor{flex:0 1 210px;opacity:.62;transform:scale(.97);gap:5px}
+.cast .actor.is-focus{opacity:1;transform:scale(1.01)}
+.portrait-slot,.roster-slot,.finish-slot{background:rgba(255,255,255,.28);border:2px dashed rgba(151,102,129,.43);border-radius:19px;display:flex;align-items:center;justify-content:center;color:#976b85}
+.portrait-slot{height:clamp(135px,16vw,214px);width:min(100%,188px);max-width:100%;margin:auto;box-shadow:inset 0 3px 12px #ffffff33}
+.slot-hint{font-size:12px;font-weight:760;opacity:.75;text-align:center;padding:10px;line-height:1.5;letter-spacing:.025em}
+.cast .actor-name{margin-top:5px;margin-bottom:9px}
+.roster-slot{width:100%;height:clamp(120px,18vw,225px);max-width:165px;background:#ffffff45}
+.roster-person{gap:8px}
+.finish-slot{min-width:0;height:145px;flex-direction:column;gap:8px;padding:10px}
+.finish-slot span{font-size:11px;color:#9d8592;font-weight:770}
+.finish-slot b{font-size:13px;color:#835a72}
+.stage-art{min-height:0}
+.stage-footer{margin-top:7px;padding:5px 0 11px}
+@media(max-width:850px){
+  .stage-dialogues{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));margin-top:15px}
+  .portrait-slot{height:160px}
+  .roster-slot{height:165px}
+}
+@media(max-width:650px){
+  .play>.achievement{padding:12px 13px;gap:10px;margin:0 0 13px;border-radius:17px}
+  .play>.achievement .medal{width:45px;height:45px;font-size:23px;flex:0 0 auto}
+  .play>.achievement p{font-size:11px}
+  .play>.achievement h2{font-size:19px}
+  .play>.achievement span:not(.medal){font-size:11px}
+  .stage-dialogues{display:flex;flex-direction:column;gap:9px;margin:12px 1px}
+  .stage-bubble{padding:10px 12px;border-radius:14px}
+  .stage-bubble-head{margin-bottom:4px}
+  .stage-bubble p{font-size:15px;line-height:1.8}
+  .bubble-order{height:25px;width:25px;font-size:16px}
+  .bubble-speaker{font-size:12px}
+  .cast,.cast.actor-count-1{min-height:0;padding:8px 2px 0;gap:5px}
+  .cast .actor{flex:1 1 0;min-width:0}
+  .portrait-slot{width:100%;height:100px;border-radius:11px}
+  .slot-hint{font-size:10px;padding:3px}
+  .cast .actor-name{font-size:11px;margin:4px 0}
+  .roster-slot{height:140px;border-radius:13px}
+  .finish-slot{height:105px;border-radius:12px}
+  .finish-slot span{font-size:9px}
+  .finish-slot b{font-size:11px}
+  .stage-art{min-height:0}
+}
+@media(max-width:390px){
+  .portrait-slot{height:85px}
+  .roster-slot{height:112px}
+}

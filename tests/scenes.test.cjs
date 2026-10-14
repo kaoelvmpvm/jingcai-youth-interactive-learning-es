@@ -106,10 +106,36 @@ test("21幕場景均有明確出場人物，焦點必須是出場角色",()=>{
   assert.ok(s.pages[8].focus.includes("護理師"));
   assert.deepEqual(Array.from(s.pages[22].cast),["樂樂","小琪","大明"]);
 });
-test("角色立繪與響應式設定完整",()=>{
+test("角色素材留白、台詞只在舞臺依序呈現、徽章位於最上方",()=>{
+  const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+  const app=fs.readFileSync(path.join(root,"assets","app.js"),"utf8");
   const css=fs.readFileSync(path.join(root,"assets","style.css"),"utf8");
-  assert.ok(css.includes("mobile-spotlight"));
-  assert.ok(css.includes("@media(max-width:650px)"));
+  const playStart=html.indexOf('<section id="play"');
+  const badge=html.indexOf('id="achievement"',playStart);
+  const playHead=html.indexOf('class="play-head"',playStart);
+  const theatre=html.indexOf('class="theatre"',playStart);
+  assert.ok(playStart>=0&&badge>playStart&&badge<playHead&&playHead<theatre);
+  assert.equal((html.match(/id="achievement"/g)||[]).length,1);
+  assert.ok(html.includes('id="stageNarration" class="stage-dialogues"'));
+  assert.ok(!html.includes('id="sceneLines"'));
+  assert.ok(!html.includes('class="story-card"'));
+  assert.ok(!html.includes('<img src="./assets/characters/'));
+  assert.ok(app.includes('page.lines.forEach((line,i)=>'));
+  assert.ok(app.includes('bubble-order'));
+  assert.ok(app.includes('content.textContent=line.text'));
+  assert.ok(app.includes('placeholder(personName,"portrait-slot")'));
+  assert.ok(app.includes('ui.narration.append(bubble)'));
+  assert.ok(!app.includes('document.createElement("img")'));
+  assert.ok(!app.includes('makeLines(page)'));
+  assert.ok(app.includes('showAchievement(page)'));
+  assert.ok(app.includes('showAchievement(page);'));
+  assert.ok(css.includes('.stage-bubble p{'));
+  assert.ok(css.includes('.play>.achievement'));
+  assert.ok(css.includes('.roster-slot'));
+  assert.ok(css.includes('@media(max-width:650px)'));
+  assert.doesNotThrow(()=>new vm.Script(app));
+});
+test("既有角色圖片檔保留，以供後續換成正式插圖",()=>{
   for(const slug of ["lele","xiaoqi","daming","nurse"]){
     const file=path.join(root,"assets","characters",slug+".svg");
     const image=fs.readFileSync(file,"utf8");

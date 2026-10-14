@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#fff9f7">
   <meta name="description" content="經彩青春 SET－國小篇：樂樂怎麼了？22頁互動劇情、10題月經友善挑戰。">
   <title>經彩青春 SET｜樂樂怎麼了？</title>
-  <link rel="stylesheet" href="./assets/style.css?v=stage20261014">
-  <script defer src="./data/scenes.js?v=stage20261014"></script>
-  <script defer src="./data/presence.js?v=stage20261014"></script>
-  <script defer src="./assets/app.js?v=stage20261014"></script>
+  <link rel="stylesheet" href="./assets/style.css?v=stage20261014b">
+  <script defer src="./data/scenes.js?v=stage20261014b"></script>
+  <script defer src="./data/presence.js?v=stage20261014b"></script>
+  <script defer src="./assets/app.js?v=stage20261014b"></script>
 </head>
 <body>
 <div class="shell">
@@ -45,6 +45,10 @@
     </section>
 
     <section id="play" class="view play" hidden aria-labelledby="sceneTitle">
+      <section id="achievement" class="achievement" hidden aria-labelledby="achievementTitle" role="status" aria-live="polite">
+        <span class="medal" aria-hidden="true">✦</span>
+        <div><p id="achievementStatus">GOOD JOB · 經彩知識徽章</p><h2 id="achievementTitle"></h2><span id="achievementHint">答對了！一起閱讀本題的知識回饋。</span></div>
+      </section>
       <div class="play-head">
         <div><p class="eyebrow small">經彩青春・角色互動劇場</p><h1 id="sceneTitle" tabindex="-1">樂樂怎麼了？</h1></div>
         <div class="progress-meta"><span id="sceneIndex">第 2 幕</span><span id="pageCount">02 / 22</span></div>
@@ -56,25 +60,16 @@
           <div class="scene-decor scene-decor-one" aria-hidden="true"></div>
           <div class="scene-decor scene-decor-two" aria-hidden="true"></div>
           <div class="theatre-banner"><span id="chapterLabel">01 · 體育課</span><span id="taskCount">故事開始</span></div>
-          <div id="stageNarration" class="narration" aria-live="polite" hidden></div>
+          <div id="stageNarration" class="stage-dialogues" aria-label="依照編號閱讀本幕對話" aria-live="polite"></div>
           <div id="stageCast" class="cast" aria-label="這一幕出場的故事人物"></div>
           <div class="stage-footer"><span id="locationLabel">🏐 操場</span><span>用心觀察，聽聽大家怎麼說</span></div>
         </div>
-      </section>
-
-      <section class="story-card" aria-label="完整劇情台詞">
-        <div class="section-heading"><span class="section-icon">💬</span><div><p>劇情對話</p><h2>這一幕發生了什麼事？</h2></div></div>
-        <div id="sceneLines" class="story-lines" aria-live="polite"></div>
       </section>
 
       <section id="quizPanel" class="quiz-card" hidden aria-label="互動挑戰">
         <div class="section-heading"><span class="section-icon icon-question">？</span><div><p id="quizNumber">互動挑戰</p><h2 id="questionText"></h2></div></div>
         <div id="options" class="options" role="group" aria-label="請選擇一個答案"></div>
         <div id="quizFeedback" class="feedback" aria-live="polite" hidden></div>
-      </section>
-
-      <section id="achievement" class="achievement" hidden aria-labelledby="achievementTitle">
-        <span class="medal" aria-hidden="true">✦</span><div><p>GOOD JOB · 經彩知識徽章</p><h2 id="achievementTitle"></h2><span>讀完這一幕的護理師解說，把學到的知識帶進生活中！</span></div>
       </section>
 
       <div class="controls"><button id="backBtn" class="button secondary" type="button">← 上一幕</button><p id="controlHint" aria-live="polite">閱讀完成後繼續前進。</p><button id="nextBtn" class="button primary" type="button">下一幕 →</button></div>
@@ -85,10 +80,10 @@
       <h1 id="finishTitle" tabindex="-1">恭喜你成功通關！</h1>
       <p id="finishText" class="finish-lead"></p>
       <div class="finish-cast" aria-label="四位故事夥伴">
-        <img src="./assets/characters/lele.svg" alt="樂樂">
-        <img src="./assets/characters/xiaoqi.svg" alt="小琪">
-        <img src="./assets/characters/daming.svg" alt="大明">
-        <img src="./assets/characters/nurse.svg" alt="護理師">
+        <div class="finish-slot"><span>角色圖片預留區</span><b>樂樂</b></div>
+        <div class="finish-slot"><span>角色圖片預留區</span><b>小琪</b></div>
+        <div class="finish-slot"><span>角色圖片預留區</span><b>大明</b></div>
+        <div class="finish-slot"><span>角色圖片預留區</span><b>護理師</b></div>
       </div>
       <div class="code-card"><p>🏆 經彩青春 Set 密碼</p><strong id="unlockCode">0451</strong><span id="unlockMeaning">你是唯一</span></div>
       <div class="finish-buttons"><button id="copyCodeBtn" class="button secondary" type="button">複製通關密碼</button><button id="againBtn" class="button primary" type="button">再玩一次 ↻</button></div>

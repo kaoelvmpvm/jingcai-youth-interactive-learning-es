@@ -11,9 +11,9 @@
     stars:$("starCount"),heading:$("sceneTitle"),sceneIndex:$("sceneIndex"),pageCount:$("pageCount"),
     progress:$("progressTrack"),bar:$("progressBar"),banner:$("chapterLabel"),task:$("taskCount"),
     art:$("stageArt"),narration:$("stageNarration"),cast:$("stageCast"),location:$("locationLabel"),
-    lines:$("sceneLines"),quiz:$("quizPanel"),quizNumber:$("quizNumber"),question:$("questionText"),
+    quiz:$("quizPanel"),quizNumber:$("quizNumber"),question:$("questionText"),
     options:$("options"),feedback:$("quizFeedback"),achievement:$("achievement"),
-    achievementTitle:$("achievementTitle"),hint:$("controlHint"),
+    achievementTitle:$("achievementTitle"),achievementStatus:$("achievementStatus"),achievementHint:$("achievementHint"),hint:$("controlHint"),
     finishTitle:$("finishTitle"),finishText:$("finishText"),unlock:$("unlockCode"),
     meaning:$("unlockMeaning"),copy:$("copyCodeBtn"),copyMessage:$("copyMessage")
   };
@@ -53,28 +53,29 @@
     ui.headerStars.hidden=!active;
     if(typeof window.scrollTo==="function")window.scrollTo({top:0,behavior:"auto"});
   }
+  function placeholder(label,className){
+    const slot=document.createElement("div");
+    slot.className=className;
+    const hint=document.createElement("span");
+    hint.className="slot-hint";
+    hint.textContent="角色圖片預留區";
+    hint.setAttribute("aria-hidden","true");
+    slot.append(hint);
+    slot.setAttribute("role","img");
+    slot.setAttribute("aria-label",label+"的角色圖片預留位置");
+    return slot;
+  }
   function buildRoster(){
     ui.roster.replaceChildren();
     for(const person of data.characters){
-      const info=stage.characters[person.speaker];
       const item=document.createElement("div");
       item.className="roster-person";
-      const img=document.createElement("img");
-      img.src=info.image;img.alt=person.speaker;img.loading="eager";
+      const box=placeholder(person.speaker,"roster-slot");
       const label=document.createElement("strong");label.textContent=person.speaker;
       const desc=document.createElement("small");desc.textContent=person.tagline;
-      item.append(img,label,desc);ui.roster.append(item);
+      item.append(box,label,desc);ui.roster.append(item);
     }
   }
-  function addMobileSpotlight(){
-    const el=document.createElement("div");
-    el.id="mobileSpotlight";el.className="mobile-spotlight";
-    el.setAttribute("aria-hidden","true");
-    ui.art.insertBefore(el,ui.cast);
-    return el;
-  }
-  const spotlight=addMobileSpotlight();
-
   function castFor(page){
     const config=stage.pages[page.page];
     const place=stage.locations[config.location];
@@ -82,69 +83,47 @@
     ui.location.textContent=place.label;
     ui.cast.className="cast actor-count-"+config.cast.length;
     ui.cast.replaceChildren();
-    const narrations=page.lines.filter(line=>!names.includes(line.speaker));
-    ui.narration.hidden=narrations.length===0;
     ui.narration.replaceChildren();
-    narrations.forEach(line=>{
-      const p=document.createElement("p");
-      p.textContent=line.speaker==="旁白"?line.text:line.speaker+"：「"+line.text+"」";
-      ui.narration.append(p);
+    const badges=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
+    // Follow the script's original line order, regardless of which character stands where.
+    page.lines.forEach((line,i)=>{
+      const isNarrator=!names.includes(line.speaker);
+      const bubble=document.createElement("article");
+      bubble.className="stage-bubble"+(isNarrator?" stage-bubble-narrator":"")+(line.text.length>100?" stage-bubble-long":"");
+      bubble.setAttribute("aria-label","第"+(i+1)+"句，"+line.speaker+"："+line.text);
+      const heading=document.createElement("div");heading.className="stage-bubble-head";
+      const number=document.createElement("strong");number.className="bubble-order";
+      number.textContent=badges[i]||String(i+1);
+      const speaker=document.createElement("span");speaker.className="bubble-speaker";
+      speaker.textContent=line.speaker;
+      heading.append(number,speaker);
+      const content=document.createElement("p");content.textContent=line.text;
+      bubble.append(heading,content);
+      ui.narration.append(bubble);
     });
-
-    const first=page.lines.find(line=>names.includes(line.speaker));
-    spotlight.hidden=!first;
-    if(first){
-      const snippet=first.text.length>64?first.text.slice(0,64)+"……":first.text;
-      spotlight.textContent=first.speaker+"：「"+snippet+"」";
-    }
     for(const personName of config.cast){
-      const person=stage.characters[personName];
-      if(!person)continue;
       const actor=document.createElement("div");
       const focused=config.focus.includes(personName);
-      const mood=(config.mood||{})[personName];
-      actor.className="actor"+(focused?" is-focus":"")+(mood?" mood-"+mood:"");
-      const speech=page.lines.filter(l=>l.speaker===personName).map(l=>l.text);
-      if(speech.length){
-        const bubble=document.createElement("div");
-        bubble.className="actor-bubble";
-        const words=document.createElement("span");
-        words.textContent=speech.join(" ");
-        bubble.title=speech.join(" ");
-        bubble.append(words);
-        if(words.textContent.length>60){
-          const note=document.createElement("small");
-          note.textContent="完整內容見下方";
-          bubble.append(note);
-        }
-        actor.append(bubble);
-      }
-      const portrait=document.createElement("img");
-      portrait.className="portrait";portrait.src=person.image;
-      portrait.alt=personName+(mood?"（"+moods[mood]+"）":"");
-      portrait.loading="eager";
-      actor.append(portrait);
-      if(mood){
-        const emoji=document.createElement("span");emoji.className="actor-mood";
-        emoji.textContent=stage.moods[mood]||"";
-        emoji.title=moods[mood]||"";
-        emoji.setAttribute("aria-hidden","true");
-        actor.append(emoji);
-      }
-      const name=document.createElement("span");name.className="actor-name";
-      name.textContent=personName;
-      actor.append(name);ui.cast.append(actor);
+      actor.className="actor"+(focused?" is-focus":"");
+      actor.append(placeholder(personName,"portrait-slot"));
+      const name=document.createElement("span");
+      name.className="actor-name";name.textContent=personName;
+      actor.append(name);
+      ui.cast.append(actor);
     }
   }
-  function makeLines(page){
-    ui.lines.replaceChildren();
-    page.lines.forEach(line=>{
-      const article=document.createElement("div");
-      article.className="story-line"+(line.speaker==="旁白"?" narrator":"");
-      const who=document.createElement("strong");who.textContent=line.speaker;
-      const speech=document.createElement("p");speech.textContent=line.text;
-      article.append(who,speech);ui.lines.append(article);
-    });
+  function showAchievement(page){
+    const earned=page.kind==="reward" || (page.kind==="quiz" && state.solved.has(page.qid));
+    ui.achievement.hidden=!earned;
+    if(!earned)return;
+    const resultPage=page.kind==="reward"
+      ? page
+      : pages.find(p=>p.kind==="reward"&&p.qid===page.qid);
+    ui.achievementTitle.textContent=resultPage?resultPage.title:"答題成功";
+    ui.achievementStatus.textContent="GOOD JOB · 已答對第 "+page.qid+" / 10 題";
+    ui.achievementHint.textContent=page.kind==="quiz"
+      ?"本題已通過！點選「下一幕」，即可閱讀完整的知識回饋。"
+      :"經彩知識徽章已獲得！請閱讀舞臺中的完整知識說明。";
   }
   function setFeedback(message,isCorrect){
     ui.feedback.hidden=false;
@@ -156,8 +135,10 @@
     if(selected===page.correct){
       state.solved.add(page.qid);
       state.wrong=-1;
-      setFeedback("答對了！獲得一枚經彩星星 ✦。點選「下一幕」閱讀知識回饋。",true);
+      setFeedback("答對了！你已獲得經彩知識徽章，請查看畫面最上方的通關提示。",true);
+      showAchievement(page);
       save();
+      window.scrollTo({top:0,behavior:"auto"});
     }else{
       state.wrong=selected;
       setFeedback("再想一想！可以重新選擇答案，答對後才能前往下一幕。",false);
@@ -186,7 +167,7 @@
   }
   function renderQuiz(page){
     ui.quiz.hidden=page.kind!=="quiz";
-    ui.achievement.hidden=page.kind!=="reward";
+    showAchievement(page);
     state.wrong=-1;
     if(page.kind==="quiz"){
       ui.quizNumber.textContent="互動挑戰 "+String(page.qid).padStart(2,"0")+" / 10";
@@ -199,7 +180,6 @@
       ui.next.disabled=!state.solved.has(page.qid);
       ui.hint.textContent=ui.next.disabled?"先完成這一題才能繼續。":"已通過本題，可以進入下一幕。";
     }else if(page.kind==="reward"){
-      ui.achievementTitle.textContent=page.title;
       ui.next.disabled=false;
       ui.hint.textContent="這是剛才題目的知識回饋，讀完可以繼續。";
     }else{
@@ -221,7 +201,6 @@
     ui.banner.textContent=page.chapter;
     ui.task.textContent=page.qid?"第 "+String(page.qid).padStart(2,"0")+" / 10 題":"故事開始";
     castFor(page);
-    makeLines(page);
     renderQuiz(page);
     ui.back.textContent=state.index===0?"← 回到首頁":"← 上一幕";
     ui.next.textContent=state.index===pages.length-1?"領取經彩青春 Set 密碼 →":"下一幕 →";
