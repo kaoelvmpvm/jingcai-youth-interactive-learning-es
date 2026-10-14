@@ -1,0 +1,50 @@
+name: 匯入經彩青春角色圖片
+on:
+  push:
+    branches: [main]
+    paths:
+      - uploads/characters.zip
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: jingcai-character-import
+  cancel-in-progress: false
+jobs:
+  import:
+    name: 驗證 ZIP、匯入 17 張角色圖並更新網站
+    runs-on: ubuntu-latest
+    environment: github-pages
+    steps:
+      - name: 取得最新程式
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: 驗證角色圖包並更新素材
+        run: python3 scripts/import_characters.py uploads/characters.zip
+      - name: 檢查題目與角色系統
+        run: node --test tests/scenes.test.cjs
+      - name: 儲存角色圖片與圖片設定
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/characters/generated data/character-assets.js index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "自動匯入經彩青春 17 張角色立繪"
+            git push origin HEAD:main
+          else
+            echo "All images are already up to date."
+          fi
+      # GITHUB_TOKEN commits do not trigger a second branch-based Pages build.
+      # Set Settings > Pages > Source: GitHub Actions once.
+      - name: 設定 GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: 打包靜態網站
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+      - name: 發布新版網站
+        id: deployment
+        uses: actions/deploy-pages@v4

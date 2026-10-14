@@ -133,3 +133,16 @@ button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:
   .portrait-slot{height:85px}
   .roster-slot{height:112px}
 }
+
+/* 17-pose PNG auto-import support: hide placeholders when an actual sprite exists. */
+.roster-slot.has-sprite,.portrait-slot.has-sprite,.finish-portrait.has-sprite{
+  border:0!important;background:transparent!important;box-shadow:none!important;
+  overflow:visible;display:flex;align-items:end;justify-content:center
+}
+.character-sprite{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom}
+.finish-portrait{width:100%;height:110px;display:flex;align-items:center;justify-content:center}
+.finish-slot:has(.finish-portrait){height:160px;border:0;background:transparent}
+@media(max-width:650px){
+  .finish-portrait{height:82px}
+  .finish-slot:has(.finish-portrait){height:120px}
+}

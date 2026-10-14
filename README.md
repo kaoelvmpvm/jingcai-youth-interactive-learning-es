@@ -25,3 +25,19 @@
 執行驗證：`node --test tests/scenes.test.cjs`。
 
 本專案使用 GitHub Pages 靜態託管，不需要 API 或資料庫。
+
+## 角色圖 ZIP 一鍵匯入
+
+本專案支援完整 **17 張角色立繪**（樂樂 6、小琪 4、大明 4、護理師 3），固定檔名：
+`C01_L01.png`～`C01_L06.png`、`C02_Q01.png`～`C02_Q04.png`、
+`C03_D01.png`～`C03_D04.png`、`C04_N01.png`～`C04_N03.png`。
+
+1. 開啟 [uploads 資料夾](https://github.com/kaoelvmpvm/jingcai-youth-interactive-learning-es/tree/main/uploads)。
+2. 點選 **Add file → Upload files**，上傳整個 ZIP（**不要解壓縮**），在 GitHub 內的檔名必須為 `uploads/characters.zip`。在本機可將下載的圖包先改名 `characters.zip`。
+3. Commit 至 `main` 後，[Actions → 匯入經彩青春角色圖片](https://github.com/kaoelvmpvm/jingcai-youth-interactive-learning-es/actions/workflows/import-characters.yml) 即自動驗證 17 張透明 PNG、解壓縮、寫入 `assets/characters/generated/`、更新 `data/character-assets.js`、快取版本，並嘗試直接部署 GitHub Pages。
+4. **第一次使用請在 Settings → Pages → Build and deployment → Source 選擇 GitHub Actions**。因為 GitHub bot 的自動提交不會觸發 branch-based Pages build，因此匯入流程本身包含 Pages 部署步驟。這一步需要儲存庫管理員在設定頁手動完成。
+5. 未上傳 ZIP 前網站維持原本的角色圖預留框；失敗或缺圖也會退回預留框，不影響答題。
+
+上傳後若要替換角色圖片，只要用同名 ZIP 再次上傳覆蓋 `uploads/characters.zip`。教學劇本 `data/scenes.js`、選項、正確答案及密碼不受圖片匯入影響。
+
+如果 Actions 出現 push 權限問題，請檢查 Settings → Actions → General → Workflow permissions 是否允許這個工作流程使用 `contents: write`，以及 main 分支保護政策是否允許 bot 提交。

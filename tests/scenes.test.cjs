@@ -123,9 +123,9 @@ test("角色素材留白、台詞只在舞臺依序呈現、徽章位於最上�
   assert.ok(app.includes('page.lines.forEach((line,i)=>'));
   assert.ok(app.includes('bubble-order'));
   assert.ok(app.includes('content.textContent=line.text'));
-  assert.ok(app.includes('placeholder(personName,"portrait-slot")'));
+  assert.ok(app.includes('portraitFor(personName,scenePoses[personName]||poses.default[personName],"portrait-slot")'));
   assert.ok(app.includes('ui.narration.append(bubble)'));
-  assert.ok(!app.includes('document.createElement("img")'));
+  assert.ok(app.includes('document.createElement("img")'));
   assert.ok(!app.includes('makeLines(page)'));
   assert.ok(app.includes('showAchievement(page)'));
   assert.ok(app.includes('showAchievement(page);'));
@@ -142,4 +142,35 @@ test("既有角色圖片檔保留，以供後續換成正式插圖",()=>{
     assert.ok(image.startsWith("<svg"),"角色立繪缺少："+slug);
     assert.ok(image.includes("</svg>"));
   }
+});
+
+test("圖片設定具有17種固定姿勢，且未匯入時保留預留框",()=>{
+  const script=fs.readFileSync(path.join(root,"data","character-poses.js"),"utf8");
+  const registry=fs.readFileSync(path.join(root,"data","character-assets.js"),"utf8");
+  const context={window:{}};
+  vm.runInNewContext(script,context);
+  vm.runInNewContext(registry,context);
+  const p=context.window.JINGCAI_POSES;
+  const assets=context.window.JINGCAI_ASSETS;
+  assert.equal(Object.keys(p.pages).length,21);
+  assert.equal(Object.keys(p.default).length,4);
+  assert.ok(p.pages[7]["樂樂"]==="C01_L06");
+  assert.ok(p.pages[8]["護理師"]==="C04_N02");
+  const all=new Set([...Object.values(p.default),...Object.values(p.finish),...Object.values(p.pages).flatMap(Object.values)]);
+  assert.equal(all.size,17);
+  assert.ok(assets.ready===true||assets.ready===false);
+  if(assets.ready){
+    assert.equal(Object.keys(assets.files).length,17);
+    for(const entry of all){
+      const url=assets.files[entry];
+      assert.ok(url.includes(entry+".png"),"素材對應失敗："+entry);
+      assert.ok(fs.existsSync(path.join(root,"assets","characters","generated",entry+".png")));
+    }
+  }
+  const app=fs.readFileSync(path.join(root,"assets","app.js"),"utf8");
+  const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+  assert.ok(html.includes("data/character-poses.js"));
+  assert.ok(html.includes("data/character-assets.js"));
+  assert.ok(app.includes("if(!source)return fallback()"));
+  assert.doesNotThrow(()=>new vm.Script(app));
 });

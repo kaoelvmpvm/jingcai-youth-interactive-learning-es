@@ -3,6 +3,8 @@
   "use strict";
   const data=window.JINGCAI_DATA;
   const stage=window.JINGCAI_STAGE;
+  const poses=window.JINGCAI_POSES||{default:{},pages:{},finish:{}};
+  const assets=window.JINGCAI_ASSETS||{ready:false,files:{}};
   const $=id=>document.getElementById(id);
   const ui={
     welcome:$("welcome"),play:$("play"),finish:$("finish"),start:$("startBtn"),
@@ -65,15 +67,43 @@
     slot.setAttribute("aria-label",label+"的角色圖片預留位置");
     return slot;
   }
+  function portraitFor(personName,poseCode,className){
+    const fallback=()=>placeholder(personName,className);
+    const source=assets.ready&&assets.files&&assets.files[poseCode];
+    if(!source)return fallback();
+    const holder=document.createElement("div");
+    holder.className=className+" has-sprite";
+    const picture=document.createElement("img");
+    picture.className="character-sprite";
+    picture.src=source;
+    picture.alt=personName;
+    picture.loading="lazy";
+    picture.decoding="async";
+    picture.addEventListener("error",()=>holder.replaceWith(fallback()),{once:true});
+    holder.append(picture);
+    return holder;
+  }
   function buildRoster(){
     ui.roster.replaceChildren();
     for(const person of data.characters){
       const item=document.createElement("div");
       item.className="roster-person";
-      const box=placeholder(person.speaker,"roster-slot");
+      const code=poses.default[person.speaker];
+      const box=portraitFor(person.speaker,code,"roster-slot");
       const label=document.createElement("strong");label.textContent=person.speaker;
       const desc=document.createElement("small");desc.textContent=person.tagline;
       item.append(box,label,desc);ui.roster.append(item);
+    }
+  }
+  function buildFinishCast(){
+    const container=document.querySelector(".finish-cast");
+    if(!container)return;
+    container.replaceChildren();
+    for(const name of ["樂樂","小琪","大明","護理師"]){
+      const item=document.createElement("div");item.className="finish-slot";
+      item.append(portraitFor(name,poses.finish[name]||poses.default[name],"finish-portrait"));
+      const label=document.createElement("b");label.textContent=name;
+      item.append(label);container.append(item);
     }
   }
   function castFor(page){
@@ -105,7 +135,8 @@
       const actor=document.createElement("div");
       const focused=config.focus.includes(personName);
       actor.className="actor"+(focused?" is-focus":"");
-      actor.append(placeholder(personName,"portrait-slot"));
+      const scenePoses=poses.pages[page.page]||{};
+      actor.append(portraitFor(personName,scenePoses[personName]||poses.default[personName],"portrait-slot"));
       const name=document.createElement("span");
       name.className="actor-name";name.textContent=personName;
       actor.append(name);
@@ -252,6 +283,7 @@
     }
   }
   buildRoster();
+  buildFinishCast();
   resume=getSaved();
   if(resume)ui.start.textContent="繼續上次進度 →";
   ui.start.addEventListener("click",start);
