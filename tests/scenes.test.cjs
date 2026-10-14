@@ -9,7 +9,7 @@ const context={window:{}};
 vm.runInNewContext(source,context);
 const d=context.window.JINGCAI_DATA;
 
-test("23頁劇本由封面、21個內頁及結尾構成",()=>{
+test("22頁劇本由封面、21個內頁構成，另有通關畫面",()=>{
   assert.equal(d.pages.length,21);
   assert.deepEqual(Array.from(d.pages,x=>x.page),Array.from({length:21},(_,i)=>i+2));
   assert.equal(d.pages.filter(p=>p.kind==="story").length,1);
@@ -44,9 +44,39 @@ test("每題後緊接知識徽章，且每頁都有閱讀內容",()=>{
 });
 test("四個角色、完成密碼、界面依賴檔案存在",()=>{
   assert.deepEqual(Array.from(d.characters,c=>c.speaker),["樂樂","小琪","大明","護理師"]);
-  assert.equal(d.ending.code,"5200");
+  assert.equal(d.ending.code,"0451");
+  assert.equal(d.ending.meaning,"你是唯一");
   for(const file of ["index.html","assets/style.css","assets/app.js","data/scenes.js"]){
     assert.ok(fs.statSync(path.join(root,file)).size>0);
   }
   assert.doesNotThrow(()=>new vm.Script(fs.readFileSync(path.join(root,"assets","app.js"),"utf8")));
+});
+
+test("調整版的清潔題、班會課與最後的月經友善題完全對應劇本",()=>{
+  const p=n=>d.pages.find(x=>x.page===n);
+  assert.equal(p(17).options[1],"徹底洗香香，用清潔劑沖洗私密處");
+  assert.equal(p(17).correct,0);
+  assert.match(p(18).lines[0].text,/不需用力刷和以清潔劑沖洗/);
+  assert.match(p(18).lines[0].text,/私密處\\(陰道\\)/);
+  assert.match(p(21).lines[0].text,/功力等級大增！回到教室/);
+  assert.deepEqual(Array.from(p(21).options),[
+    "覺得經血很可怕，像個怪物遠躲開",
+    "提到月經很丟臉，多開玩笑不尷尬",
+    "月經是自然的事，互相關懷跟尊重"
+  ]);
+  assert.equal(p(21).correct,2);
+  assert.equal(p(22).lines.length,1);
+  assert.equal(p(22).lines[0].text,"月經專屬女孩的「成長鬧鐘」，不管是男生還是女生，只要大家多一點體貼、多一點了解，彼此都是同理神隊友，一起健康喜悅地迎接青春期的到來！");
+});
+
+test("22頁介面與通關密碼、解釋一致",()=>{
+  const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+  const app=fs.readFileSync(path.join(root,"assets/app.js"),"utf8");
+  assert.match(html,/id="unlockCode">0451<\\/b>/);
+  assert.match(html,/id="unlockMeaning"/);
+  assert.match(html,/下一幕/);
+  assert.match(app,/\\/ 22<\\/small>/);
+  assert.match(app,/data\\.ending\\.meaning/);
+  assert.doesNotMatch(html,/5200/);
+  assert.doesNotMatch(app,/5200/);
 });
