@@ -69,14 +69,51 @@ test("調整版的清潔題、班會課與最後的月經友善題完全對應�
   assert.equal(p(22).lines[0].text,"月經專屬女孩的「成長鬧鐘」，不管是男生還是女生，只要大家多一點體貼、多一點了解，彼此都是同理神隊友，一起健康喜悅地迎接青春期的到來！");
 });
 
-test("22頁介面與通關密碼、解釋一致",()=>{
+test("22頁新版舞臺介面與通關密碼一致",()=>{
   const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
-  const app=fs.readFileSync(path.join(root,"assets/app.js"),"utf8");
-  assert.ok(html.includes('id="unlockCode">0451</b>'));
+  const app=fs.readFileSync(path.join(root,"assets","app.js"),"utf8");
+  const presence=fs.readFileSync(path.join(root,"data","presence.js"),"utf8");
+  assert.ok(html.includes('id="unlockCode">0451</strong>'));
   assert.ok(html.includes('id="unlockMeaning"'));
+  assert.ok(html.includes('id="stageCast"'));
+  assert.ok(html.includes('id="stageNarration"'));
+  assert.ok(html.includes('id="quizPanel"'));
+  assert.ok(html.includes('data/presence.js'));
   assert.ok(html.includes("下一幕"));
-  assert.ok(app.includes("/ 22</small>"));
+  assert.ok(app.includes('state.solved.size!==10'));
   assert.ok(app.includes("data.ending.meaning"));
   assert.ok(!html.includes("5200"));
   assert.ok(!app.includes("5200"));
+  assert.ok(presence.includes("window.JINGCAI_STAGE"));
+  assert.doesNotThrow(()=>new vm.Script(app));
+  assert.doesNotThrow(()=>new vm.Script(presence));
+});
+test("21幕場景均有明確出場人物，焦點必須是出場角色",()=>{
+  const stageSource=fs.readFileSync(path.join(root,"data","presence.js"),"utf8");
+  const context={window:{}};
+  vm.runInNewContext(stageSource,context);
+  const s=context.window.JINGCAI_STAGE;
+  assert.equal(Object.keys(s.pages).length,21);
+  for(const page of d.pages){
+    const p=s.pages[page.page];
+    assert.ok(p,"場景缺失："+page.page);
+    assert.ok(s.locations[p.location],"場景地點未定義："+page.page);
+    assert.ok(p.cast.length>=1 && p.cast.length<=4);
+    assert.ok(p.focus.every(name=>p.cast.includes(name)));
+    assert.ok(p.cast.every(name=>s.characters[name]));
+  }
+  assert.deepEqual(Array.from(s.pages[7].cast),["樂樂","小琪","大明","護理師"]);
+  assert.ok(s.pages[8].focus.includes("護理師"));
+  assert.deepEqual(Array.from(s.pages[22].cast),["樂樂","小琪","大明"]);
+});
+test("角色立繪與響應式設定完整",()=>{
+  const css=fs.readFileSync(path.join(root,"assets","style.css"),"utf8");
+  assert.ok(css.includes("mobile-spotlight"));
+  assert.ok(css.includes("@media(max-width:650px)"));
+  for(const slug of ["lele","xiaoqi","daming","nurse"]){
+    const file=path.join(root,"assets","characters",slug+".svg");
+    const image=fs.readFileSync(file,"utf8");
+    assert.ok(image.startsWith("<svg"),"角色立繪缺少："+slug);
+    assert.ok(image.includes("</svg>"));
+  }
 });

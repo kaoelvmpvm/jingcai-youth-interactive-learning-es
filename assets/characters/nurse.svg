@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 430" role="img" aria-label="護理師人物立繪">
+<defs><linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#B2D9CB"/><stop offset="1" stop-color="#5A9C87"/></linearGradient><linearGradient id="face" x1="0" y1="0" x2=".95" y2="1"><stop stop-color="#FFE2C5"/><stop offset="1" stop-color="#F6CAA7"/></linearGradient></defs>
+<ellipse cx="164" cy="410" rx="100" ry="14" fill="#8C6472" opacity=".13"/>
+<circle cx="232" cy="76" r="38" fill="#533C3A"/><path d="M100 118Q91 38 161 32Q227 33 223 130L211 153H112Z" fill="#533C3A"/>
+<path d="M123 351L128 402H154L161 349Z" fill="#7094A8"/><path d="M174 349L184 402H211L205 351Z" fill="#7094A8"/>
+<path d="M116 391Q121 385 150 391L158 409Q137 422 113 408Z" fill="#514354"/><path d="M182 391Q194 384 219 392L225 409Q201 422 180 406Z" fill="#514354"/>
+<path d="M127 235Q101 259 94 317L82 348" fill="none" stroke="#B2D9CB" stroke-width="27" stroke-linecap="round"/><path d="M202 237Q225 258 234 317L247 343" fill="none" stroke="#B2D9CB" stroke-width="27" stroke-linecap="round"/>
+<ellipse cx="81" cy="350" rx="17" ry="23" transform="rotate(-20 81 350)" fill="#F6CAA7"/><ellipse cx="247" cy="349" rx="17" ry="23" transform="rotate(20 247 349)" fill="#F6CAA7"/>
+<path d="M117 221Q153 199 204 220L224 362H101Z" fill="#FAFEFE" stroke="#AED4C8" stroke-width="4"/><path d="M141 229L166 277L184 228L171 211H154Z" fill="#B2D9CB"/><path d="M160 264L149 346M174 265L185 346" stroke="#B4D6CA" stroke-width="3"/><path d="M205 250Q235 271 218 318" fill="none" stroke="#5A9C87" stroke-width="5"/>
+<rect x="147" y="185" width="36" height="48" rx="15" fill="#F6CAA7"/>
+<ellipse cx="160" cy="127" rx="67" ry="78" fill="url(#face)"/>
+<ellipse cx="95" cy="131" rx="13" ry="20" fill="#F6CAA7"/><ellipse cx="226" cy="131" rx="13" ry="20" fill="#F6CAA7"/>
+<path d="M114 91Q117 57 152 53Q187 58 205 88Q212 43 164 41Q115 39 109 89Z" fill="#533C3A"/>
+<path d="M122 124q16-11 30 0M172 124q15-11 29 0" fill="none" stroke="#533C3A" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="139" cy="139" rx="5.7" ry="8" fill="#3F3745"/><ellipse cx="187" cy="139" rx="5.7" ry="8" fill="#3F3745"/>
+<circle cx="141" cy="136" r="2.1" fill="#fff"/><circle cx="189" cy="136" r="2.1" fill="#fff"/>
+<ellipse cx="115" cy="160" rx="12" ry="7" fill="#EFA7A8" opacity=".55"/><ellipse cx="208" cy="160" rx="12" ry="7" fill="#EFA7A8" opacity=".55"/>
+<path d="M151 170Q163 182 176 170" fill="none" stroke="#B97172" stroke-width="4" stroke-linecap="round"/>
+<rect x="135" y="249" width="50" height="55" rx="8" fill="#FFFFFF" opacity=".95"/><rect x="152" y="256" width="16" height="39" rx="3" fill="#5A9C87"/><rect x="142" y="266" width="36" height="15" rx="3" fill="#5A9C87"/><path d="M118 45Q159 9 207 45L209 71H115Z" fill="#FFFEFB" stroke="#D6E3E0" stroke-width="3"/><path d="M154 38v21m-10-11h20" stroke="#DB748A" stroke-width="7" stroke-linecap="round"/>
+<path d="M113 356Q163 367 219 354" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".35"/>
+</svg>
