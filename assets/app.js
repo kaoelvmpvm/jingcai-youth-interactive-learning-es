@@ -29,7 +29,6 @@
   const pages=data.pages;
   const storageKey="jingcai-set-elementary-stage-20261014";
   const state={index:-1,solved:new Set(),wrong:-1};
-  const names=Object.keys(stage.characters);
   const moods={unwell:"身體不適",worried:"擔心",curious:"好奇",relieved:"放心",smile:"開心"};
   const letters=["A","B","C"];
   let resume=null;
@@ -121,7 +120,7 @@
     const badges=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
     // Follow the script's original line order, regardless of which character stands where.
     page.lines.forEach((line,i)=>{
-      const isNarrator=!names.includes(line.speaker);
+      const isNarrator=line.speaker==="情境";
       const bubble=document.createElement("article");
       bubble.className="stage-bubble"+(isNarrator?" stage-bubble-narrator":"")+(line.text.length>100?" stage-bubble-long":"");
       bubble.setAttribute("aria-label","第"+(i+1)+"句，"+(isNarrator?"情境說明":line.speaker)+"："+line.text);
