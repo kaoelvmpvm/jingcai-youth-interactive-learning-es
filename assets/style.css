@@ -146,3 +146,8 @@ button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:
   .finish-portrait{height:82px}
   .finish-slot:has(.finish-portrait){height:120px}
 }
+
+/* 2026-10-17：首頁第一幕標示、單獨護理師講解與逐句揭露 */
+.first-scene-badge{display:inline-flex;align-items:center;vertical-align:middle;margin-right:6px;padding:3px 11px;border-radius:99px;background:#fff7fb;border:1px solid #e7a9c2;color:#a34f73;font-size:.84em;font-weight:950}
+.cast.actor-count-1 .actor{flex:0 1 260px;opacity:1;transform:scale(1)}
+.stage-bubble[hidden]{display:none!important}
