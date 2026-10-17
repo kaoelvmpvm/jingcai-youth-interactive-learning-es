@@ -6,12 +6,12 @@
   <meta name="theme-color" content="#fff9f7">
   <meta name="description" content="經彩青春 SET－國小篇：樂樂怎麼了？22頁互動劇情、10題月經友善挑戰。">
   <title>經彩青春 SET｜樂樂怎麼了？</title>
-  <link rel="stylesheet" href="./assets/style.css?v=stage20261014assets1">
-  <script defer src="./data/scenes.js?v=stage20261014b"></script>
-  <script defer src="./data/presence.js?v=stage20261014assets1"></script>
+  <link rel="stylesheet" href="./assets/style.css?v=stage20261017rev2">
+  <script defer src="./data/scenes.js?v=stage20261017rev2"></script>
+  <script defer src="./data/presence.js?v=stage20261017rev2"></script>
   <script defer src="./data/character-poses.js?v=stage20261014assets1"></script>
   <script defer src="./data/character-assets.js?v=bf8b4931fb6b"></script>
-  <script defer src="./assets/app.js?v=stage20261014assets1"></script>
+  <script defer src="./assets/app.js?v=stage20261017rev2"></script>
 </head>
 <body>
 <div class="shell">
@@ -21,8 +21,6 @@
       <span><strong>經彩青春 <em>SET</em></strong><small>國小互動劇場・樂樂怎麼了？</small></span>
     </a>
     <div class="top-meta">
-      <span class="meta-pill">國小篇</span>
-      <span id="headerStage" class="meta-pill meta-progress" hidden>第 1／22 幕</span>
       <span id="headerStars" class="meta-pill meta-stars" hidden>✦ <b id="starCount">0</b>／10</span>
       <button id="resetBtn" class="text-button" type="button" hidden>↻ 重新開始</button>
     </div>
@@ -33,14 +31,14 @@
       <div class="welcome-copy">
         <p class="eyebrow">青春健康・認識月經・友善關懷</p>
         <h1 id="welcomeTitle">樂樂<span>怎麼了？</span></h1>
-        <p class="intro">今天的躲避球課，活力滿滿的樂樂卻不太舒服。和小琪、大明、護理師一起探索月經的知識，用理解與同理成為彼此的神隊友！</p>
+        <p class="intro">在校園裡學生們討論著月經的話題，經由護理師與學生間的對話，引領著他們認識月經保健、學習同理關懷，迎接青春與健康成長。</p>
         <div class="intro-stats"><span>📖 22 幕劇情</span><span>✦ 10 題互動挑戰</span><span>🏆 1 組通關密碼</span></div>
-        <div class="howto"><h2>遊戲怎麼玩？</h2><p><b>01 看故事</b>　閱讀人物對話與場景旁白</p><p><b>02 選答案</b>　A／B／C 三選一，答錯可以重試</p><p><b>03 學知識</b>　答對才能進入下一幕，解鎖徽章與通關密碼</p></div>
+        <div class="howto"><h2>遊戲怎麼玩？</h2><p><b>01 看故事</b>　閱讀人物對話與情境說明</p><p><b>02 選答案</b>　A／B／C 三選一，答錯可以重試</p><p><b>03 學知識</b>　答對才能進入下一幕，解鎖徽章與通關密碼</p></div>
         <button id="startBtn" class="button primary hero-action" type="button">開始挑戰 <span aria-hidden="true">→</span></button>
       </div>
       <div class="welcome-art">
         <div class="welcome-decor" aria-hidden="true">✿　✦　✳</div>
-        <p class="welcome-art-label">認識四位故事夥伴</p>
+        <p class="welcome-art-label"><span class="first-scene-badge">第一幕</span> 認識四位夥伴</p>
         <div id="characterRoster" class="roster" aria-label="故事人物"></div>
         <p class="welcome-art-foot">有疑問、會好奇、需要幫忙，都可以說出來。</p>
       </div>
@@ -52,8 +50,7 @@
         <div><p id="achievementStatus">GOOD JOB · 經彩知識徽章</p><h2 id="achievementTitle"></h2><span id="achievementHint">答對了！一起閱讀本題的知識回饋。</span></div>
       </section>
       <div class="play-head">
-        <div><p class="eyebrow small">經彩青春・角色互動劇場</p><h1 id="sceneTitle" tabindex="-1">樂樂怎麼了？</h1></div>
-        <div class="progress-meta"><span id="sceneIndex">第 2 幕</span><span id="pageCount">02 / 22</span></div>
+        <div><h1 id="sceneTitle" tabindex="-1">樂樂怎麼了？</h1></div>
       </div>
       <div id="progressTrack" class="progress-track" role="progressbar" aria-label="劇情進度" aria-valuemin="0" aria-valuemax="22" aria-valuenow="1"><div id="progressBar"></div></div>
 
@@ -61,10 +58,8 @@
         <div id="stageArt" class="stage-art location-sports">
           <div class="scene-decor scene-decor-one" aria-hidden="true"></div>
           <div class="scene-decor scene-decor-two" aria-hidden="true"></div>
-          <div class="theatre-banner"><span id="chapterLabel">01 · 體育課</span><span id="taskCount">故事開始</span></div>
           <div id="stageNarration" class="stage-dialogues" aria-label="依照編號閱讀本幕對話" aria-live="polite"></div>
           <div id="stageCast" class="cast" aria-label="這一幕出場的故事人物"></div>
-          <div class="stage-footer"><span id="locationLabel">🏐 操場</span><span>用心觀察，聽聽大家怎麼說</span></div>
         </div>
       </section>
 
