@@ -104,7 +104,7 @@ test("21幕場景均有明確出場人物，焦點必須是出場角色",()=>{
   }
   assert.deepEqual(Array.from(s.pages[7].cast),["樂樂","小琪","大明","護理師"]);
   assert.ok(s.pages[8].focus.includes("護理師"));
-  assert.deepEqual(Array.from(s.pages[22].cast),["樂樂","小琪","大明"]);
+  assert.deepEqual(Array.from(s.pages[22].cast),["護理師"]);
 });
 test("角色素材留白、台詞只在舞臺依序呈現、徽章位於最上方",()=>{
   const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
@@ -173,4 +173,26 @@ test("圖片設定具有17種固定姿勢，且未匯入時保留預留框",()=>
   assert.ok(html.includes("data/character-assets.js"));
   assert.ok(app.includes("if(!source)return fallback()"));
   assert.doesNotThrow(()=>new vm.Script(app));
+});
+
+test("經彩知識全由護理師單獨呈現，情境不用旁白字樣",()=>{
+  const context={window:{}};
+  vm.runInNewContext(fs.readFileSync(path.join(root,"data","presence.js"),"utf8"),context);
+  for(const p of d.pages.filter(x=>x.kind==="reward")){
+    assert.equal(p.lines.length,1);
+    assert.equal(p.lines[0].speaker,"護理師");
+    assert.deepEqual(Array.from(context.window.JINGCAI_STAGE.pages[p.page].cast),["護理師"]);
+  }
+  assert.ok(!source.includes('"speaker": "旁白"'));
+});
+test("介面符合新首頁文案、第一幕與依序呈現",()=>{
+  const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
+  const app=fs.readFileSync(path.join(root,"assets","app.js"),"utf8");
+  assert.ok(html.includes("在校園裡學生們討論著月經的話題"));
+  assert.ok(html.includes('class="first-scene-badge">第一幕'));
+  for(const x of ["經彩青春・角色互動劇場",'id="headerStage"','id="sceneIndex"','id="chapterLabel"','id="locationLabel"',"用心觀察，聽聽大家怎麼說","場景旁白"])assert.ok(!html.includes(x),x);
+  assert.ok(app.includes('page.kind==="reward" && state.solved.has(page.qid)'));
+  assert.ok(app.includes('"經彩知識("+page.qid+")護理師："'));
+  assert.ok(app.includes("bubble.hidden=!reduceMotion&&i>0"));
+  assert.ok(app.includes("window.setTimeout"));
 });
