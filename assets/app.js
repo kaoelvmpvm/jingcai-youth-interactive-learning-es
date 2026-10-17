@@ -9,10 +9,10 @@
   const ui={
     welcome:$("welcome"),play:$("play"),finish:$("finish"),start:$("startBtn"),
     reset:$("resetBtn"),again:$("againBtn"),back:$("backBtn"),next:$("nextBtn"),
-    roster:$("characterRoster"),headerStage:$("headerStage"),headerStars:$("headerStars"),
-    stars:$("starCount"),heading:$("sceneTitle"),sceneIndex:$("sceneIndex"),pageCount:$("pageCount"),
-    progress:$("progressTrack"),bar:$("progressBar"),banner:$("chapterLabel"),task:$("taskCount"),
-    art:$("stageArt"),narration:$("stageNarration"),cast:$("stageCast"),location:$("locationLabel"),
+    roster:$("characterRoster"),headerStars:$("headerStars"),
+    stars:$("starCount"),heading:$("sceneTitle"),
+    progress:$("progressTrack"),bar:$("progressBar"),
+    art:$("stageArt"),narration:$("stageNarration"),cast:$("stageCast"),
     quiz:$("quizPanel"),quizNumber:$("quizNumber"),question:$("questionText"),
     options:$("options"),feedback:$("quizFeedback"),achievement:$("achievement"),
     achievementTitle:$("achievementTitle"),achievementStatus:$("achievementStatus"),achievementHint:$("achievementHint"),hint:$("controlHint"),
@@ -33,6 +33,9 @@
   const moods={unwell:"身體不適",worried:"擔心",curious:"好奇",relieved:"放心",smile:"開心"};
   const letters=["A","B","C"];
   let resume=null;
+  let dialogueTimers=[];
+  let dialogueVersion=0;
+  const reduceMotion=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   function getSaved(){
     try{
@@ -51,7 +54,6 @@
     for(const key of ["welcome","play","finish"])ui[key].hidden=key!==name;
     const active=name!=="welcome";
     ui.reset.hidden=!active;
-    ui.headerStage.hidden=!active;
     ui.headerStars.hidden=!active;
     if(typeof window.scrollTo==="function")window.scrollTo({top:0,behavior:"auto"});
   }
@@ -110,9 +112,11 @@
     const config=stage.pages[page.page];
     const place=stage.locations[config.location];
     ui.art.className="stage-art "+place.className;
-    ui.location.textContent=place.label;
     ui.cast.className="cast actor-count-"+config.cast.length;
     ui.cast.replaceChildren();
+    for(const timer of dialogueTimers)window.clearTimeout(timer);
+    dialogueTimers=[];
+    const version=++dialogueVersion;
     ui.narration.replaceChildren();
     const badges=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
     // Follow the script's original line order, regardless of which character stands where.
@@ -120,17 +124,27 @@
       const isNarrator=!names.includes(line.speaker);
       const bubble=document.createElement("article");
       bubble.className="stage-bubble"+(isNarrator?" stage-bubble-narrator":"")+(line.text.length>100?" stage-bubble-long":"");
-      bubble.setAttribute("aria-label","第"+(i+1)+"句，"+line.speaker+"："+line.text);
+      bubble.setAttribute("aria-label","第"+(i+1)+"句，"+(isNarrator?"情境說明":line.speaker)+"："+line.text);
+      bubble.hidden=!reduceMotion&&i>0;
       const heading=document.createElement("div");heading.className="stage-bubble-head";
       const number=document.createElement("strong");number.className="bubble-order";
       number.textContent=badges[i]||String(i+1);
       const speaker=document.createElement("span");speaker.className="bubble-speaker";
-      speaker.textContent=line.speaker;
-      heading.append(number,speaker);
+      speaker.textContent=page.kind==="reward"?"經彩知識("+page.qid+")護理師：":line.speaker;
+      heading.append(number);
+      if(!isNarrator)heading.append(speaker);
       const content=document.createElement("p");content.textContent=line.text;
       bubble.append(heading,content);
       ui.narration.append(bubble);
     });
+    if(!reduceMotion){
+      Array.from(ui.narration.children).forEach((bubble,i)=>{
+        if(i===0)return;
+        dialogueTimers.push(window.setTimeout(()=>{
+          if(version===dialogueVersion&&bubble.isConnected)bubble.hidden=false;
+        },i*1800));
+      });
+    }
     for(const personName of config.cast){
       const actor=document.createElement("div");
       const focused=config.focus.includes(personName);
@@ -144,7 +158,7 @@
     }
   }
   function showAchievement(page){
-    const earned=page.kind==="reward" || (page.kind==="quiz" && state.solved.has(page.qid));
+    const earned=page.kind==="reward" && state.solved.has(page.qid);
     ui.achievement.hidden=!earned;
     if(!earned)return;
     const resultPage=page.kind==="reward"
@@ -166,10 +180,9 @@
     if(selected===page.correct){
       state.solved.add(page.qid);
       state.wrong=-1;
-      setFeedback("答對了！你已獲得經彩知識徽章，請查看畫面最上方的通關提示。",true);
+      setFeedback("答對了！點選「下一幕」，閱讀護理師的經彩知識說明。",true);
       showAchievement(page);
       save();
-      window.scrollTo({top:0,behavior:"auto"});
     }else{
       state.wrong=selected;
       setFeedback("再想一想！可以重新選擇答案，答對後才能前往下一幕。",false);
@@ -223,14 +236,9 @@
     const page=pages[state.index];
     if(!page){reset(false);return;}
     ui.heading.textContent=page.title;
-    ui.sceneIndex.textContent="第 "+page.page+" 幕";
-    ui.pageCount.textContent=String(page.page).padStart(2,"0")+" / 22";
-    ui.headerStage.textContent="第 "+page.page+"／22 幕";
     ui.stars.textContent=String(state.solved.size);
     ui.bar.style.width=String((page.page/22)*100)+"%";
     ui.progress.setAttribute("aria-valuenow",String(page.page));
-    ui.banner.textContent=page.chapter;
-    ui.task.textContent=page.qid?"第 "+String(page.qid).padStart(2,"0")+" / 10 題":"故事開始";
     castFor(page);
     renderQuiz(page);
     ui.back.textContent=state.index===0?"← 回到首頁":"← 上一幕";
@@ -244,7 +252,6 @@
     ui.finishText.textContent=data.ending.text;
     ui.unlock.textContent=data.ending.code;
     ui.meaning.textContent=data.ending.meaning||"";
-    ui.headerStage.textContent="22／22 幕 · 通關";
     ui.stars.textContent=String(state.solved.size);
     ui.copyMessage.textContent="";
     save();view("finish");ui.finishTitle.focus({preventScroll:true});
